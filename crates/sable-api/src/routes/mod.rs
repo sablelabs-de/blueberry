@@ -1,12 +1,11 @@
-use rocket::{get, routes, Build, Rocket};
+use axum::{routing::get, Router};
 
 // this is temporary
-#[get("/_sable")]
-fn sable() -> &'static str {
+async fn sable() -> &'static str {
   "sable"
 }
 
-/// Mounts all `sable-api` routes on the given Rocket instance.
-pub fn mount(rocket: Rocket<Build>) -> Rocket<Build> {
-  rocket.mount("/", routes![sable])
+/// Returns a `Router` with all routes mounted.
+pub fn mount() -> Router {
+  Router::new().route("/_sable", get(sable))
 }
