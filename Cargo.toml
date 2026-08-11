@@ -1,2 +1,6 @@
 [workspace]
 members = ["crates/sable", "crates/sable-api"]
+resolver = "3"
+
+[workspace.dependencies]
+rocket = "0.5"
