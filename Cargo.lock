@@ -868,7 +868,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cf54715a573b99ac80df0bc206da022bcd442c974952c7b9720069370852e21f"
 
 [[package]]
-name = "sable-server"
+name = "sable"
+version = "0.1.0"
+dependencies = [
+ "rocket",
+ "sable-api",
+]
+
+[[package]]
+name = "sable-api"
 version = "0.1.0"
 dependencies = [
  "rocket",

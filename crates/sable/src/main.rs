@@ -1,6 +1,6 @@
-use sable_server::web;
+use sable::web;
 
-/// Launches the server, and will exit with an error on failure.
+/// Launches the Rocket server, exiting with an error message on failure.
 #[rocket::launch]
 async fn rocket() -> _ {
   match web().await {
