@@ -1,7 +1,21 @@
 [workspace]
-members = ["crates/sable", "crates/sable-api"]
 resolver = "3"
+members = ["crates/sable", "crates/sable-api", "crates/core/authn"]
 
 [workspace.dependencies]
-axum = "0.8"
-tokio = { version = "1", features = ["macros", "net", "rt-multi-thread"] }
+# errors
+thiserror = "2.0.19"
+strum = { version = "0.28.0", features = [ "derive" ] }
+
+# common
+uuid = { version = "1.24.0", features = [ "v7" ] }
+chrono = "0.4.45"
+async-trait = "0.1.91"
+
+axum = "0.8.9"
+tokio = { version = "1.53.1", features = ["macros", "net", "rt-multi-thread"] }
+
+sqlx = { version = "0.9.0", features = [ "uuid", "chrono", "postgres", "runtime-tokio", "tls-native-tls" ] }
+
+# tests
+testcontainers-modules = { version = "0.15.0", features = [ "postgres", "redis" ] }
