@@ -1,3 +1,26 @@
-/target
-.env
+# OS & System Files
 .DS_Store
+Thumbs.db
+
+# Environment & Virtual Environments
+.env
+.venv/
+venv/
+
+# Rust / Cargo Build Artifacts
+target
+
+# Profiling / Performance Data
+perf.data
+perf.data.*
+
+# IDE / Editor
+.zed/
+.idea/
+.vscode/
+*.iml
+
+# Temporary / Backup Files
+*.rs.bk
+*.rs~
+*.tmp
