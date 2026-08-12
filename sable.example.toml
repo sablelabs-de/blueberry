@@ -8,8 +8,8 @@
 # A plain `sable.toml` is loaded first as a shared base layer, and then
 # profile files are merged on top so they only need to override what differs.
 
-environment = "development"
+environment = "development" # This should only be "development", "staging", or "production".
 
 [server]
-host = "127.0.0.1"
+host = "127.0.0.1" # You will have to use 0.0.0.0 if running under Docker.
 port = 5178
