@@ -58,6 +58,13 @@ fn read_optional(path: &Path) -> Result<Option<Value>, ConfigError> {
   let text = match fs::read_to_string(path) {
     Ok(text) => text,
     Err(err) if err.kind() == io::ErrorKind::NotFound => return Ok(None),
+    Err(err) if err.kind() == io::ErrorKind::IsADirectory => {
+      eprintln!(
+        "warning: expected a config file at `{}` but found a directory; treating it as missing",
+        path.display()
+      );
+      return Ok(None);
+    }
     Err(source) => {
       return Err(ConfigError::Read {
         path: path.to_owned(),
