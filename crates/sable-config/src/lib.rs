@@ -1,10 +1,4 @@
-//! Typed configuration for Sable, loaded from TOML.
-//!
-//! Config is read from `sable.toml`, and `sable.<profile>.toml
-//! Config profiles act as overrides over sable.toml and are deep-merged in that order.
-//! The active profile  will come from the `SABLE_PROFILE` environment variable,
-//! or the --profile flag. The profile defaults  to `development`. :3
-//!
+//! Typed configuration for Sable, loaded from TOML files.
 //! ```no_run
 //! use sable_config::Config;
 //!

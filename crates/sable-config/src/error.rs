@@ -2,7 +2,6 @@ use std::{io, path::PathBuf};
 
 use thiserror::Error;
 
-/// Errors that can occur while loading configuration.
 #[derive(Debug, Error)]
 pub enum ConfigError {
   /// No `sable.toml` or `sable.<profile>.toml` was found.

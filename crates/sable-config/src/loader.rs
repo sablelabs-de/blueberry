@@ -5,14 +5,10 @@ use toml::Value;
 
 use crate::{error::ConfigError, structs::Config};
 
-/// Environment variable used to select the profile.
-/// You may also pass the '--profile' flag.
 const PROFILE_ENV: &str = "SABLE_PROFILE";
-
-/// Profile to use when it is not set otehrwise.
 const DEFAULT_PROFILE: &str = "development";
 
-/// This returns the active profile.
+/// Returns the active profile.
 pub fn profile() -> String {
   env::var(PROFILE_ENV).unwrap_or_else(|_| DEFAULT_PROFILE.to_owned())
 }
@@ -58,7 +54,6 @@ impl Config {
   }
 }
 
-/// Reads `path`, returning `Ok(None)` when it does not exist.
 fn read_optional(path: &Path) -> Result<Option<Value>, ConfigError> {
   let text = match fs::read_to_string(path) {
     Ok(text) => text,
@@ -78,8 +73,6 @@ fn read_optional(path: &Path) -> Result<Option<Value>, ConfigError> {
   Ok(Some(value))
 }
 
-/// Deep-merges `overlay` into `base`: tables merge recursively, everything
-/// else (scalars, arrays) replaces the base value.
 fn merge(base: &mut Value, overlay: Value) {
   match (base, overlay) {
     (Value::Table(base), Value::Table(overlay)) => {
