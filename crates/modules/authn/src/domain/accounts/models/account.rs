@@ -9,23 +9,23 @@ use crate::domain::accounts::models::{email::Email, username::Username};
 pub struct AccountId(Uuid);
 
 impl AccountId {
-    pub fn new() -> Self {
-        Self(Uuid::now_v7())
-    }
+  pub fn new() -> Self {
+    Self(Uuid::now_v7())
+  }
 }
 
 #[derive(Debug, FromRow)]
 pub struct Account {
-    pub id: AccountId,
-    pub email: String,
-    pub email_verified: bool,
-    pub password_hash: String,
-    pub created_at: DateTime<Utc>,
-    pub updated_at: DateTime<Utc>,
+  pub id: AccountId,
+  pub email: String,
+  pub email_verified: bool,
+  pub password_hash: String,
+  pub created_at: DateTime<Utc>,
+  pub updated_at: DateTime<Utc>,
 }
 
 pub struct NewAccount {
-    pub username: Username,
-    pub email: Email,
-    pub password_hash: String,
+  pub username: Username,
+  pub email: Email,
+  pub password_hash: String,
 }

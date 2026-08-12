@@ -1,7 +1,4 @@
-use std::{
-  env, fs, io,
-  path::Path,
-};
+use std::{env, fs, io, path::Path};
 
 use serde::Deserialize;
 use toml::Value;
@@ -47,7 +44,11 @@ impl Config {
       }
       (Some(base), None) => base,
       (None, Some(specific)) => specific,
-      (None, None) => return Err(ConfigError::NotFound { profile: profile.to_owned() }),
+      (None, None) => {
+        return Err(ConfigError::NotFound {
+          profile: profile.to_owned(),
+        });
+      }
     };
 
     Config::deserialize(value).map_err(|source| ConfigError::Parse {
@@ -62,11 +63,18 @@ fn read_optional(path: &Path) -> Result<Option<Value>, ConfigError> {
   let text = match fs::read_to_string(path) {
     Ok(text) => text,
     Err(err) if err.kind() == io::ErrorKind::NotFound => return Ok(None),
-    Err(source) => return Err(ConfigError::Read { path: path.to_owned(), source }),
+    Err(source) => {
+      return Err(ConfigError::Read {
+        path: path.to_owned(),
+        source,
+      });
+    }
   };
 
-  let value = toml::from_str(&text)
-    .map_err(|source| ConfigError::Parse { path: path.to_owned(), source })?;
+  let value = toml::from_str(&text).map_err(|source| ConfigError::Parse {
+    path: path.to_owned(),
+    source,
+  })?;
   Ok(Some(value))
 }
 
