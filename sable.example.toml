@@ -1,0 +1,15 @@
+# Sable config example
+#
+# Copy this file to `sable.<profile>.toml`, e.g. `sable.development.toml`,
+# and edit. The active profile is selected with the `SABLE_PROFILE`
+# environment variable or the `-p` / `--profile` command line flag, and
+# defaults to `development`.
+#
+# A plain `sable.toml` is loaded first as a shared base layer, and then
+# profile files are merged on top so they only need to override what differs.
+
+environment = "development"
+
+[server]
+host = "127.0.0.1"
+port = 5178

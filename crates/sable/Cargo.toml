@@ -6,4 +6,6 @@ edition = "2024"
 [dependencies]
 axum.workspace = true
 tokio.workspace = true
+clap.workspace = true
 sable-api = { path = "../sable-api" }
+sable-config = { path = "../sable-config" }

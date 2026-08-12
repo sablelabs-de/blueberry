@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["crates/sable", "crates/sable-api", "crates/modules/authn"]
+members = ["crates/sable", "crates/sable-api", "crates/sable-config", "crates/modules/authn"]
 
 [workspace.dependencies]
 # errors
@@ -11,6 +11,13 @@ strum = { version = "0.28.0", features = [ "derive" ] }
 uuid = { version = "1.24.0", features = [ "v7" ] }
 chrono = "0.4.45"
 async-trait = "0.1.91"
+
+# config
+serde = { version = "1.0", features = [ "derive" ] }
+toml = "0.9"
+
+# cli
+clap = { version = "4.5", features = [ "derive" ] }
 
 axum = "0.8.9"
 tokio = { version = "1.53.1", features = ["macros", "net", "rt-multi-thread"] }
