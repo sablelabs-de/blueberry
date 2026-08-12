@@ -2,6 +2,16 @@
 
 TBD
 
+## TO RUN UNDER DOCKER
+
+specifically for this repo's compose setup
+
+default profile:
+`docker compose up api`
+
+pick a profile:
+`SABLE_PROFILE=production docker compose up api`
+
 ## Licensing
 
 Copyright (C) 2026 Sable Labs

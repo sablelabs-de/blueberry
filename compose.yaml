@@ -1,4 +1,18 @@
 services:
+    api:
+        container_name: sable
+        build:
+          context: .
+        image: sable:latest
+        environment:
+            SABLE_PROFILE: ${SABLE_PROFILE:-development}
+        ports:
+            - "${SABLE_PORT:-5178}:5178"
+        working_dir: /app
+        volumes:
+            - ./sable.toml:/app/sable.toml:ro
+            - ./sable.${SABLE_PROFILE:-development}.toml:/app/sable.${SABLE_PROFILE:-development}.toml:ro
+
     db:
         image: postgres:18-alpine
         environment:
