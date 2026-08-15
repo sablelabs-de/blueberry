@@ -1,6 +1,6 @@
-use clap::Parser;
 use blueberry::web;
 use blueberry_config::Config;
+use clap::Parser;
 
 mod cli;
 
