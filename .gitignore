@@ -8,8 +8,8 @@ Thumbs.db
 venv/
 
 # Config
-sable*.toml
-!sable.example.toml
+blueberry*.toml
+!blueberry.example.toml
 
 # Rust / Cargo Build Artifacts
 target

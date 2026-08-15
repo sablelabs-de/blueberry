@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["crates/sable", "crates/sable-api", "crates/sable-config", "crates/modules/authn"]
+members = ["crates/blueberry", "crates/blueberry-api", "crates/blueberry-config", "crates/modules/authn"]
 
 [workspace.dependencies]
 # errors

@@ -5,7 +5,7 @@ use toml::Value;
 
 use crate::{error::ConfigError, structs::Config};
 
-const PROFILE_ENV: &str = "SABLE_PROFILE";
+const PROFILE_ENV: &str = "BLUEBERRY_PROFILE";
 const DEFAULT_PROFILE: &str = "development";
 
 /// Returns the active profile.
@@ -24,11 +24,11 @@ impl Config {
     Self::load_from(Path::new("."), profile)
   }
 
-  /// Loads the config from `dir`, merging `sable.toml` (shared base, optional)
-  /// with `sable.{profile}.toml` (profile overrides) in that order.
+  /// Loads the config from `dir`, merging `blueberry.toml` (shared base, optional)
+  /// with `blueberry.{profile}.toml` (profile overrides) in that order.
   pub fn load_from(dir: &Path, profile: &str) -> Result<Self, ConfigError> {
-    let base_path = dir.join("sable.toml");
-    let profile_path = dir.join(format!("sable.{profile}.toml"));
+    let base_path = dir.join("blueberry.toml");
+    let profile_path = dir.join(format!("blueberry.{profile}.toml"));
 
     let base = read_optional(&base_path)?;
     let specific = read_optional(&profile_path)?;

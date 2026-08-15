@@ -1,17 +1,17 @@
 services:
     api:
-        container_name: sable
+        container_name: blueberry
         build:
           context: .
-        image: sable:latest
+        image: blueberry:latest
         environment:
-            SABLE_PROFILE: ${SABLE_PROFILE:-development}
+            BLUEBERRY_PROFILE: ${BLUEBERRY_PROFILE:-development}
         ports:
-            - "${SABLE_PORT:-5178}:5178"
+            - "${BLUEBERRY_PORT:-5178}:5178"
         working_dir: /app
         volumes:
-            - ./sable.toml:/app/sable.toml:ro
-            - ./sable.${SABLE_PROFILE:-development}.toml:/app/sable.${SABLE_PROFILE:-development}.toml:ro
+            - ./blueberry.toml:/app/blueberry.toml:ro
+            - ./blueberry.${BLUEBERRY_PROFILE:-development}.toml:/app/blueberry.${BLUEBERRY_PROFILE:-development}.toml:ro
 
     db:
         image: postgres:18-alpine

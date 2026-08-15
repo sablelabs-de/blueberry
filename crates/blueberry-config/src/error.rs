@@ -4,9 +4,9 @@ use thiserror::Error;
 
 #[derive(Debug, Error)]
 pub enum ConfigError {
-  /// No `sable.toml` or `sable.<profile>.toml` was found.
+  /// No `blueberry.toml` or `blueberry.<profile>.toml` was found.
   #[error(
-    "no config file found for profile `{profile}` (expected `sable.{profile}.toml`)"
+    "no config file found for profile `{profile}` (expected `blueberry.{profile}.toml`)"
   )]
   NotFound { profile: String },
 

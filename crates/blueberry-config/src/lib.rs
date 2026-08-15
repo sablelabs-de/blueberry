@@ -1,6 +1,6 @@
-//! Typed configuration for Sable, loaded from TOML files.
+//! Typed configuration for Blueberry, loaded from TOML files.
 //! ```no_run
-//! use sable_config::Config;
+//! use blueberry_config::Config;
 //!
 //! let config = Config::load().expect("failed to load config");
 //! println!("{}", config.server.host);

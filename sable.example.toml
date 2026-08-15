@@ -1,11 +1,11 @@
-# Sable config example
+# Blueberry config example
 #
-# Copy this file to `sable.<profile>.toml`, e.g. `sable.development.toml`,
-# and edit. The active profile is selected with the `SABLE_PROFILE`
+# Copy this file to `blueberry.<profile>.toml`, e.g. `blueberry.development.toml`,
+# and edit. The active profile is selected with the `BLUEBERRY_PROFILE`
 # environment variable or the `-p` / `--profile` command line flag, and
 # defaults to `development`.
 #
-# A plain `sable.toml` is loaded first as a shared base layer, and then
+# A plain `blueberry.toml` is loaded first as a shared base layer, and then
 # profile files are merged on top so they only need to override what differs.
 
 environment = "development" # This should only be "development", "staging", or "production".

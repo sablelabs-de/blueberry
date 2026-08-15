@@ -1,4 +1,4 @@
-# Sable Server
+# Blueberry
 
 TBD
 
@@ -10,7 +10,7 @@ default profile:
 `docker compose up api`
 
 pick a profile:
-`SABLE_PROFILE=production docker compose up api`
+`BLUEBERRY_PROFILE=production docker compose up api`
 
 ## Licensing
 

@@ -23,17 +23,17 @@ RUN cargo chef cook $( [ "$BUILD_MODE" = "release" ] && echo "--release" ) --rec
 COPY Cargo.toml Cargo.lock ./
 COPY crates ./crates
 COPY migrations ./migrations
-RUN cargo build $( [ "$BUILD_MODE" = "release" ] && echo "--release" ) -p sable
+RUN cargo build $( [ "$BUILD_MODE" = "release" ] && echo "--release" ) -p blueberry
 
 # Runtime Stage
 FROM alpine:${ALPINE_VERSION} AS runtime
 WORKDIR /app
 RUN apk add --no-cache ca-certificates curl
 ARG BUILD_MODE
-COPY --from=builder /app/target/${BUILD_MODE}/sable /usr/local/bin/sable
+COPY --from=builder /app/target/${BUILD_MODE}/blueberry /usr/local/bin/blueberry
 EXPOSE 5178
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD curl -f http://localhost:5178/_sable || exit 1
 
-CMD ["sable"]
+CMD ["blueberry"]
