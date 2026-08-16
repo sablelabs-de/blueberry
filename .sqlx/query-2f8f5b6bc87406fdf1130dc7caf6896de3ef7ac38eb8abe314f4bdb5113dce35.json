@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        UPDATE sessions\n        SET\n            refresh_validator_hash = $2,\n            refresh_generation = refresh_generation + 1,\n            updated_at = NOW(),\n            idle_expires_at = LEAST(\n                NOW() + $3::interval,\n                absolute_expires_at\n            )\n        WHERE id = $1\n      ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Bytea",
+        "Interval"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "2f8f5b6bc87406fdf1130dc7caf6896de3ef7ac38eb8abe314f4bdb5113dce35"
+}

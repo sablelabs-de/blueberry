@@ -1,0 +1,19 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n              INSERT INTO \"sessions\"\n              (id, user_id, refresh_selector, refresh_validator_hash, idle_expires_at, absolute_expires_at)\n              VALUES\n              ($1, $2, $3, $4, NOW() + $5::interval, NOW() + $6::interval)\n          ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Uuid",
+        "Bytea",
+        "Bytea",
+        "Interval",
+        "Interval"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "b2d51f06927267c3aa4385f16b082e205a261f319020fe4db57696f4882415c3"
+}

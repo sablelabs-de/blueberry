@@ -1,0 +1,40 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n            SELECT\n                id AS \"id: SessionId\",\n                refresh_validator_hash AS \"refresh_validator_hash: RefreshValidatorHash\"\n            FROM \"sessions\"\n            WHERE\n                refresh_selector = $1\n                AND revoked_at IS NULL\n                AND idle_expires_at > NOW()\n                AND absolute_expires_at > NOW()\n            FOR UPDATE\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id: SessionId",
+        "type_info": "Uuid",
+        "origin": {
+          "Table": {
+            "table": "sessions",
+            "name": "id"
+          }
+        }
+      },
+      {
+        "ordinal": 1,
+        "name": "refresh_validator_hash: RefreshValidatorHash",
+        "type_info": "Bytea",
+        "origin": {
+          "Table": {
+            "table": "sessions",
+            "name": "refresh_validator_hash"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Bytea"
+      ]
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "f0f65a557c0680254357441668b17a47659b8ec432c74f165e9bb34b9286961e"
+}

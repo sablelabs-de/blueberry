@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n            UPDATE sessions\n            SET\n                revoked_at = NOW(),\n                revocation_reason = 'refresh_token_reuse',\n                updated_at = NOW()\n            WHERE id = $1\n        ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "71b1e05b1d940c1d274e5960cac9ae27544b76d67796dab1ea36d98b068f6a1c"
+}

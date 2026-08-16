@@ -1,8 +1,7 @@
 use authn::{
-  AccountRepository, LogInCommand, SessionConfig, SessionRepository,
-  SignUpCommand, log_in, sign_up,
+  AccountRepository, LogInCommand, SessionRepository, SignUpCommand, log_in,
+  sign_up,
 };
-use chrono::Duration;
 
 use crate::common::{TestContext, TestResult};
 
