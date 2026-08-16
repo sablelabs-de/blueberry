@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["crates/blueberry", "crates/blueberry-api", "crates/blueberry-config", "crates/modules/authn"]
+members = ["crates/blueberry", "crates/blueberry-api", "crates/blueberry-config", "crates/modules"]
 
 [workspace.dependencies]
 # errors
