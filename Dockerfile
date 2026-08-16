@@ -34,6 +34,6 @@ COPY --from=builder /app/target/${BUILD_MODE}/blueberry /usr/local/bin/blueberry
 EXPOSE 5178
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:5178/_sable || exit 1
+  CMD curl -f http://localhost:5178/_sable/brand || exit 1
 
 CMD ["blueberry"]

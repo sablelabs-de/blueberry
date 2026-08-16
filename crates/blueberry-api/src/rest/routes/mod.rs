@@ -1,11 +1,11 @@
-use axum::{Router, routing::get};
+use axum::Router;
 
-// this is temporary
-async fn sable() -> &'static str {
-  "sable"
-}
+pub mod blueberry;
+pub mod sable;
 
 /// Returns a `Router` with all routes mounted.
 pub fn mount() -> Router {
-  Router::new().route("/_sable", get(sable))
+  Router::new()
+    .nest("/_sable", sable::router())
+    .nest("/_blueberry", blueberry::router())
 }
