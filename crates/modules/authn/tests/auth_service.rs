@@ -1,4 +1,8 @@
-use authn::{AccountRepository, AuthNService, SignUpCommand};
+use authn::{
+  AccountRepository, LogInCommand, SessionConfig, SessionRepository,
+  SignUpCommand, log_in, sign_up,
+};
+use chrono::Duration;
 
 use crate::common::{TestContext, TestResult};
 
@@ -8,25 +12,31 @@ mod common;
 async fn creates_account() -> TestResult<()> {
   let ctx = TestContext::postgres().await?;
 
-  let repository = AccountRepository::new(ctx.pg_pool);
+  let account_repository = AccountRepository::new(ctx.pg_pool.clone());
 
-  let service = AuthNService::new(repository);
+  let session_repository = SessionRepository::new(ctx.pg_pool);
 
-  service
-    .sign_up(SignUpCommand {
+  // let service = AuthNService::new(account_repository, session_repository);
+
+  sign_up(
+    &account_repository,
+    SignUpCommand {
       username: "sd".to_string(),
       email: "asd@test.pl".to_string(),
       password: "asddfg953k!9Af".to_string(),
-    })
-    .await?;
+    },
+  )
+  .await?;
 
-  service
-    .sign_up(SignUpCommand {
-      username: "aasd".to_string(),
-      email: "asd@tst.pl".to_string(),
+  log_in(
+    &account_repository,
+    &session_repository,
+    LogInCommand {
+      email: "asd@test.pl".to_string(),
       password: "asddfg953k!9Af".to_string(),
-    })
-    .await?;
+    },
+  )
+  .await?;
 
   Ok(())
 }

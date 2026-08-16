@@ -2,9 +2,12 @@ use chrono::{DateTime, Utc};
 use sqlx::prelude::{FromRow, Type};
 use uuid::Uuid;
 
-use crate::domain::accounts::models::{email::Email, username::Username};
+use crate::domain::{
+  accounts::models::{email::Email, username::Username},
+  user_id::UserId,
+};
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Type)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Type)]
 #[sqlx(transparent)]
 pub struct AccountId(Uuid);
 
@@ -14,9 +17,9 @@ impl AccountId {
   }
 }
 
-#[derive(Debug, FromRow)]
+#[derive(FromRow)]
 pub struct Account {
-  pub id: AccountId,
+  pub user_id: UserId,
   pub email: String,
   pub email_verified: bool,
   pub password_hash: String,

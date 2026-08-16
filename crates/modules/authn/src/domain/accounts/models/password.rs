@@ -1,5 +1,13 @@
-#[derive(Debug, Clone, PartialEq, Eq)]
+use std::fmt::Debug;
+
+#[derive(Clone, PartialEq, Eq)]
 pub struct Password(String);
+
+impl Debug for Password {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    write!(f, "********")
+  }
+}
 
 impl Password {
   pub fn new(password: &str) -> Result<Self, ValidationError> {

@@ -1,5 +1,5 @@
 use crate::{
-  application::crypto::{self, hasher::HasherError},
+  application::crypto::hasher::{self, password::PasswordHasherError},
   domain::accounts::{
     models::{
       account::NewAccount,
@@ -22,7 +22,7 @@ pub enum SignUpError {
   Username(#[from] username::ValidationError),
   Email(#[from] email::ValidationError),
   Password(#[from] password::ValidationError),
-  Hasher(#[from] HasherError),
+  PasswordHasher(#[from] PasswordHasherError),
   CreateAccount(#[from] CreateAccountError),
 }
 
@@ -34,7 +34,7 @@ pub async fn sign_up(
   let email = Email::new(&cmd.email)?;
   let password = Password::new(&cmd.password)?;
 
-  let password_hash = crypto::hasher::hash_password(password).await?;
+  let password_hash = hasher::password::hash(password).await?;
 
   let new_user = NewAccount {
     username,

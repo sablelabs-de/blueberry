@@ -1,16 +1,16 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\n                SELECT\n                    id AS \"id: AccountId\",\n                    email AS \"email: Email\",\n                    email_verified,\n                    password_hash,\n                    created_at,\n                    updated_at\n                FROM \"accounts\"\n                WHERE email = $1\n                LIMIT 1\n            ",
+  "query": "\n                SELECT\n                    user_id AS \"user_id: UserId\",\n                    email AS \"email: Email\",\n                    email_verified,\n                    password_hash,\n                    created_at,\n                    updated_at\n                FROM \"accounts\"\n                WHERE email = $1\n                LIMIT 1\n            ",
   "describe": {
     "columns": [
       {
         "ordinal": 0,
-        "name": "id: AccountId",
+        "name": "user_id: UserId",
         "type_info": "Uuid",
         "origin": {
           "Table": {
             "table": "accounts",
-            "name": "id"
+            "name": "user_id"
           }
         }
       },
@@ -84,5 +84,5 @@
       false
     ]
   },
-  "hash": "8d21e23c6ad339de13b5e07534747848f2ec6741570b468e9dab042a7a2fdf0e"
+  "hash": "4b308a5b3231538a814664465d5d67d63a664ca03f7d3cb94592db25bbefe0da"
 }

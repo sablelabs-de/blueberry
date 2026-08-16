@@ -1,11 +1,25 @@
+use chrono::Duration;
+
 use crate::{
-  application::crypto::{self, hasher::HasherError},
-  domain::accounts::{
-    models::{
-      email::{self, Email},
-      password::{self, Password},
+  application::crypto::hasher::{self, password::PasswordHasherError},
+  domain::{
+    accounts::{
+      models::{
+        email::{self, Email},
+        password::{self, Password},
+      },
+      repository::{AbstractAccountRepository, FindAccountError},
     },
-    repository::{AbstractAccountRepository, FindAccountError},
+    sessions::{
+      models::{
+        refresh_selector,
+        refresh_token::RefreshToken,
+        refresh_validator,
+        session::{NewSession, SessionId},
+      },
+      repository::{AbstractSessionRepository, CreateSessionError},
+    },
+    user_id::UserId,
   },
 };
 
@@ -18,12 +32,14 @@ pub struct LogInCommand {
 pub enum LogInError {
   Email(#[from] email::ValidationError),
   Password(#[from] password::ValidationError),
-  Hasher(#[from] HasherError),
+  PasswordHasher(#[from] PasswordHasherError),
   FindAccount(#[from] FindAccountError),
+  CreateSession(#[from] CreateSessionError),
 }
 
 pub async fn log_in(
   account_repository: &impl AbstractAccountRepository,
+  session_repository: &impl AbstractSessionRepository,
   cmd: LogInCommand,
 ) -> Result<(), LogInError> {
   let email = Email::new(&cmd.email)?;
@@ -33,18 +49,31 @@ pub async fn log_in(
 
   let password_hash = match account {
     Ok(ref account) => &account.password_hash,
-    Err(FindAccountError::NotFound) => crypto::hasher::DUMMY_HASH,
+    Err(FindAccountError::NotFound) => hasher::password::DUMMY_HASH,
     Err(error) => return Err(error.into()),
   }
   .to_owned();
 
-  let verification =
-    crypto::hasher::verify_password(password, password_hash).await;
+  let verification = hasher::password::verify(password, password_hash).await;
 
   let account = account?;
   verification?;
 
-  // todo!
+  let session_id = SessionId::new();
+  let refresh_token = RefreshToken::generate();
+
+  let new_session = NewSession {
+    id: session_id,
+    user_id: account.user_id,
+    refresh_selector: refresh_token.selector(),
+    refresh_validator_hash: hasher::refresh_token::hash(
+      refresh_token.validator(),
+    ),
+    idle_ttl: Duration::days(30), // should be from config
+    absolute_ttl: Duration::days(360),
+  };
+
+  session_repository.create_session(new_session).await?;
 
   Ok(())
 }

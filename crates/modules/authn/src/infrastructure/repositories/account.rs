@@ -4,7 +4,7 @@ use sqlx::{PgPool, Postgres, Transaction};
 use crate::domain::{
   accounts::{
     models::{
-      account::{Account, AccountId, NewAccount},
+      account::{Account, NewAccount},
       email::Email,
       username::Username,
     },
@@ -13,6 +13,7 @@ use crate::domain::{
     },
   },
   shared::errors::UnexpectedError,
+  user_id::UserId,
 };
 
 impl From<sqlx::Error> for CreateAccountError {
@@ -46,9 +47,11 @@ impl AbstractAccountRepository for AccountRepository {
     &self,
     new_account: NewAccount,
   ) -> Result<(), CreateAccountError> {
-    let id = AccountId::new();
+    let id = UserId::new();
 
     let mut tx = self.pool.begin().await.map_err(UnexpectedError::new)?;
+
+    insert_user_tx(&mut tx, id, new_account.username).await?;
 
     insert_account_tx(
       &mut tx,
@@ -57,8 +60,6 @@ impl AbstractAccountRepository for AccountRepository {
       new_account.password_hash,
     )
     .await?;
-
-    insert_user_tx(&mut tx, id, new_account.username).await?;
 
     tx.commit().await.map_err(UnexpectedError::new)?;
 
@@ -73,7 +74,7 @@ impl AbstractAccountRepository for AccountRepository {
       Account,
       r#"
                 SELECT
-                    id AS "id: AccountId",
+                    user_id AS "user_id: UserId",
                     email AS "email: Email",
                     email_verified,
                     password_hash,
@@ -95,18 +96,18 @@ impl AbstractAccountRepository for AccountRepository {
 
 async fn insert_account_tx(
   tx: &mut Transaction<'_, Postgres>,
-  id: AccountId,
+  user_id: UserId,
   email: Email,
   password_hash: String,
 ) -> Result<(), sqlx::Error> {
   sqlx::query!(
     r#"
             INSERT INTO "accounts"
-            (id, email, password_hash)
+            (user_id, email, password_hash)
             VALUES
             ($1, $2, $3)
         "#,
-    id as AccountId,
+    user_id as UserId,
     email as Email,
     password_hash
   )
@@ -118,7 +119,7 @@ async fn insert_account_tx(
 
 async fn insert_user_tx(
   tx: &mut Transaction<'_, Postgres>,
-  id: AccountId,
+  user_id: UserId,
   username: Username,
 ) -> Result<(), sqlx::Error> {
   sqlx::query!(
@@ -128,7 +129,7 @@ async fn insert_user_tx(
             VALUES
             ($1, $2)
         "#,
-    id as AccountId,
+    user_id as UserId,
     username as Username,
   )
   .execute(&mut **tx)

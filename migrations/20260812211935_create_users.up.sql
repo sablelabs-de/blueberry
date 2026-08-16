@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS public.users (
-    id UUID PRIMARY KEY REFERENCES public.accounts(id),
+    id UUID PRIMARY KEY,
 
     username TEXT NOT NULL UNIQUE,
 

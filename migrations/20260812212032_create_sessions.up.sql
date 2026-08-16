@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS public.sessions (
     id UUID PRIMARY KEY,
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
 
-    refresh_selector_hash BYTEA NOT NULL UNIQUE,
+    refresh_selector BYTEA NOT NULL UNIQUE,
     refresh_validator_hash BYTEA NOT NULL,
     -- Counter of token refreshes.
     refresh_generation INTEGER NOT NULL DEFAULT 0,
