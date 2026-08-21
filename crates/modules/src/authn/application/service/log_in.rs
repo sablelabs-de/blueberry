@@ -42,23 +42,21 @@ pub async fn log_in(
   let email = Email::new(&cmd.email)?;
   let password = Password::new(&cmd.password)?;
 
+  // Do not return an error early, when the account is not found,
+  // to prevent revealing whether the account exists.
   let account = account_repository.find_account_by_email(email).await;
-
   let password_hash = match account {
     Ok(ref account) => &account.password_hash,
     Err(FindAccountError::NotFound) => hasher::password::DUMMY_HASH,
     Err(error) => return Err(error.into()),
   }
   .to_owned();
-
   let verification = hasher::password::verify(password, password_hash).await;
-
   let account = account?;
   verification?;
 
   let session_id = SessionId::new();
   let refresh_token = RefreshToken::generate();
-
   let new_session = NewSession {
     id: session_id,
     user_id: account.user_id,
@@ -66,11 +64,10 @@ pub async fn log_in(
     refresh_validator_hash: hasher::refresh_token::hash(
       refresh_token.validator(),
     ),
-    idle_ttl: Duration::days(30), // should be from config
+    idle_ttl: Duration::days(30), // TODO: should be from config
     absolute_ttl: Duration::days(360),
   };
-
-  session_repository.create_session(new_session).await?;
+  session_repository.create(new_session).await?;
 
   Ok(())
 }

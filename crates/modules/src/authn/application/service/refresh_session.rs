@@ -25,7 +25,6 @@ pub async fn refresh_session(
   let presented_refresh_token = RefreshToken::parse(&cmd.refresh_token)?;
 
   let rotated_refresh_token = presented_refresh_token.rotate();
-
   let rotation = RefreshTokenRotation {
     presented_selector: presented_refresh_token.selector(),
     presented_validator_hash: hasher::refresh_token::hash(
@@ -34,9 +33,8 @@ pub async fn refresh_session(
     new_validator_hash: hasher::refresh_token::hash(
       rotated_refresh_token.validator(),
     ),
-    idle_ttl: Duration::days(30), // should be from config
+    idle_ttl: Duration::days(30), // TODO: should be from config
   };
-
   let session_id = session_repository.rotate_refresh_token(rotation).await?;
 
   Ok(())

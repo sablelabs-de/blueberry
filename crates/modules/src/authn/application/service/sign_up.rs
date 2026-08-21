@@ -35,13 +35,11 @@ pub async fn sign_up(
   let password = Password::new(&cmd.password)?;
 
   let password_hash = hasher::password::hash(password).await?;
-
   let new_user = NewAccount {
     username,
     email,
     password_hash,
   };
-
   account_repository.create(new_user).await?;
 
   Ok(())

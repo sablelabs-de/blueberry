@@ -54,7 +54,6 @@ impl AbstractAccountRepository for AccountRepository {
     let mut tx = self.pool.begin().await.map_err(UnexpectedError::new)?;
 
     insert_user_tx(&mut tx, id, new_account.username).await?;
-
     insert_account_tx(
       &mut tx,
       id,

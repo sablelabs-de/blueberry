@@ -22,7 +22,7 @@ pub enum RotateRefreshTokenError {
 
 #[async_trait]
 pub trait AbstractSessionRepository {
-  async fn create_session(
+  async fn create(
     &self,
     new_session: NewSession,
   ) -> Result<(), CreateSessionError>;

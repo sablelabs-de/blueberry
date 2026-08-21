@@ -31,7 +31,7 @@ impl SessionRepository {
 
 #[async_trait]
 impl AbstractSessionRepository for SessionRepository {
-  async fn create_session(
+  async fn create(
     &self,
     new_session: NewSession,
   ) -> Result<(), CreateSessionError> {

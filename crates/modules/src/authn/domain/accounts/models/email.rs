@@ -5,7 +5,7 @@ use sqlx::prelude::Type;
 pub struct Email(String);
 
 impl Email {
-  /// Creates a new `EmailAddress` while normalizing the email's structure.
+  /// Creates a new `Email` while normalizing the email's structure.
   pub fn new(email: &str) -> Result<Self, ValidationError> {
     let email = email.to_lowercase();
 
