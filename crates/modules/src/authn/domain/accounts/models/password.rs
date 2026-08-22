@@ -1,5 +1,7 @@
 use std::fmt::Debug;
 
+use derive_more::Display;
+
 #[derive(Clone, PartialEq, Eq)]
 pub struct Password(String);
 
@@ -62,7 +64,7 @@ impl From<Password> for String {
   }
 }
 
-#[derive(thiserror::Error, strum::Display, Debug, PartialEq)]
+#[derive(thiserror::Error, Display, Debug, PartialEq)]
 pub enum ValidationError {
   Empty,
   TooShort,

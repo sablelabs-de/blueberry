@@ -1,4 +1,5 @@
 use async_trait::async_trait;
+use derive_more::Display;
 
 use crate::{
   authn::domain::sessions::models::{
@@ -8,12 +9,12 @@ use crate::{
   shared::errors::UnexpectedError,
 };
 
-#[derive(thiserror::Error, strum::Display, Debug)]
+#[derive(thiserror::Error, Display, Debug)]
 pub enum CreateSessionError {
   Unexpected(#[from] UnexpectedError),
 }
 
-#[derive(thiserror::Error, strum::Display, Debug)]
+#[derive(thiserror::Error, Display, Debug)]
 pub enum RotateRefreshTokenError {
   InvalidToken,
   ReuseDetectedAndRevoked,

@@ -1,4 +1,5 @@
 use chrono::Duration;
+use derive_more::Display;
 
 use crate::authn::{
   application::crypto::hasher,
@@ -12,7 +13,7 @@ pub struct RefreshSessionCommand {
   pub refresh_token: String,
 }
 
-#[derive(thiserror::Error, strum::Display, Debug)]
+#[derive(thiserror::Error, Display, Debug)]
 pub enum RefreshSessionError {
   RefreshToken(#[from] refresh_token::ParseError),
   RotateRefreshToken(#[from] RotateRefreshTokenError),

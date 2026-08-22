@@ -3,20 +3,24 @@ pub mod password {
     Argon2, PasswordHash, PasswordHasher, PasswordVerifier,
     password_hash::{SaltString, rand_core::OsRng},
   };
+  use derive_more::Display;
   use tokio::task;
 
-  use crate::authn::domain::accounts::models::password::Password;
+  use crate::{
+    authn::domain::accounts::models::password::Password,
+    shared::errors::UnexpectedError,
+  };
 
   pub const DUMMY_HASH: &str = "$argon2id$v=19$m=19456,t=2,p=1$VE0e3g7wd0Xq7M3hK5gGHg$e4iQkE888c37P/D2Z/jT5WjX+aZ5J5s5s5s5s5s5s5s";
 
-  #[derive(thiserror::Error, strum::Display, Debug)]
+  #[derive(thiserror::Error, Display, Debug)]
   pub enum PasswordHasherError {
     /// The password hash format or parameters are invalid.
     InvalidFormat,
     /// The password does not match the provided hash.
     PasswordMismatch,
     /// An error occurred during internal cryptographic processing or parameter constraints.
-    InternalError,
+    Unexpected(#[from] UnexpectedError),
   }
 
   fn hash_sync(password: Password) -> Result<String, PasswordHasherError> {
@@ -24,7 +28,7 @@ pub mod password {
 
     let hash = Argon2::default()
       .hash_password(password.as_ref().as_bytes(), &salt)
-      .map_err(|_| PasswordHasherError::InternalError)?
+      .map_err(UnexpectedError::new)?
       .to_string();
 
     Ok(hash)
@@ -33,7 +37,7 @@ pub mod password {
   pub async fn hash(password: Password) -> Result<String, PasswordHasherError> {
     task::spawn_blocking(move || hash_sync(password))
       .await
-      .map_err(|_| PasswordHasherError::InternalError)?
+      .map_err(UnexpectedError::new)?
   }
 
   fn verify_sync(
@@ -49,7 +53,7 @@ pub mod password {
         argon2::password_hash::Error::Password => {
           PasswordHasherError::PasswordMismatch
         }
-        _ => PasswordHasherError::InternalError,
+        _ => UnexpectedError::new(e).into(),
       })?;
 
     Ok(())
@@ -61,7 +65,7 @@ pub mod password {
   ) -> Result<(), PasswordHasherError> {
     task::spawn_blocking(move || verify_sync(password, password_hash))
       .await
-      .map_err(|_| PasswordHasherError::InternalError)?
+      .map_err(UnexpectedError::new)?
   }
 }
 
