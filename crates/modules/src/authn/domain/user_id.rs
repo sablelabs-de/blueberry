@@ -8,7 +8,7 @@ use uuid::Uuid;
 pub struct UserId(Uuid);
 
 impl UserId {
-  pub fn new() -> Self {
-    Self(Uuid::now_v7())
-  }
+    pub fn new() -> Self {
+        Self(Uuid::now_v7())
+    }
 }

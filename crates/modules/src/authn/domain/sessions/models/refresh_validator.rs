@@ -9,27 +9,27 @@ use crate::authn::domain::sessions::models::refresh_token::ParseError;
 pub struct RefreshValidator([u8; 32]);
 
 impl AsRef<[u8]> for RefreshValidator {
-  fn as_ref(&self) -> &[u8] {
-    &self.0
-  }
+    fn as_ref(&self) -> &[u8] {
+        &self.0
+    }
 }
 
 impl RefreshValidator {
-  pub fn generate() -> Self {
-    let mut bytes = [0; 32];
-    rand::fill(&mut bytes);
-    Self(bytes)
-  }
+    pub fn generate() -> Self {
+        let mut bytes = [0; 32];
+        rand::fill(&mut bytes);
+        Self(bytes)
+    }
 
-  pub fn parse(s: &str) -> Result<Self, ParseError> {
-    let decoded = BASE64_URL_SAFE_NO_PAD
-      .decode(s)
-      .map_err(|_| ParseError::MalformedValidator)?;
-    let bytes: [u8; 32] = decoded
-      .try_into()
-      .map_err(|_| ParseError::MalformedValidator)?;
-    Ok(Self(bytes))
-  }
+    pub fn parse(s: &str) -> Result<Self, ParseError> {
+        let decoded = BASE64_URL_SAFE_NO_PAD
+            .decode(s)
+            .map_err(|_| ParseError::MalformedValidator)?;
+        let bytes: [u8; 32] = decoded
+            .try_into()
+            .map_err(|_| ParseError::MalformedValidator)?;
+        Ok(Self(bytes))
+    }
 }
 
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Type)]
@@ -37,25 +37,25 @@ impl RefreshValidator {
 pub struct RefreshValidatorHash([u8; 32]);
 
 impl RefreshValidatorHash {
-  pub fn matches(&self, other: &Self) -> bool {
-    self.ct_eq(other).into()
-  }
+    pub fn matches(&self, other: &Self) -> bool {
+        self.ct_eq(other).into()
+    }
 }
 
 impl ConstantTimeEq for RefreshValidatorHash {
-  fn ct_eq(&self, other: &Self) -> Choice {
-    self.0.ct_eq(&other.0)
-  }
+    fn ct_eq(&self, other: &Self) -> Choice {
+        self.0.ct_eq(&other.0)
+    }
 }
 
 impl From<[u8; 32]> for RefreshValidatorHash {
-  fn from(bytes: [u8; 32]) -> Self {
-    Self(bytes)
-  }
+    fn from(bytes: [u8; 32]) -> Self {
+        Self(bytes)
+    }
 }
 
 impl Debug for RefreshValidatorHash {
-  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-    write!(f, "********")
-  }
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "********")
+    }
 }
