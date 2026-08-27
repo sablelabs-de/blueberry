@@ -49,24 +49,24 @@ pub async fn sign_up(
 
 #[cfg(test)]
 mod tests {
-  use crate::authn::domain::accounts::repository::MockAbstractAccountRepository;
+    use crate::authn::domain::accounts::repository::MockAbstractAccountRepository;
 
-  use super::*;
+    use super::*;
 
-  // TODO: this test is mostly useless, but its a showcase (template) for future tests
-  #[tokio::test]
-  async fn sign_up_success() {
-    let mut mock_account_repository = MockAbstractAccountRepository::new();
-    mock_account_repository
-      .expect_create()
-      .returning(|_| Ok(()));
+    // TODO: this test is mostly useless, but its a showcase (template) for future tests
+    #[tokio::test]
+    async fn sign_up_success() {
+        let mut mock_account_repository = MockAbstractAccountRepository::new();
+        mock_account_repository
+            .expect_create()
+            .returning(|_| Ok(()));
 
-    let cmd = SignUpCommand {
-      username: "test".to_owned(),
-      email: "test@test.test".to_owned(),
-      password: "testTEST1!".to_owned(),
-    };
+        let cmd = SignUpCommand {
+            username: "test".to_owned(),
+            email: "test@test.test".to_owned(),
+            password: "testTEST1!".to_owned(),
+        };
 
-    sign_up(&mock_account_repository, cmd).await.unwrap();
-  }
+        sign_up(&mock_account_repository, cmd).await.unwrap();
+    }
 }
