@@ -1,6 +1,7 @@
 use std::net::IpAddr;
 
 use chrono::{DateTime, Duration, Utc};
+use derive_more::Display;
 use sqlx::prelude::{FromRow, Type};
 use uuid::Uuid;
 
@@ -12,7 +13,7 @@ use crate::authn::domain::{
     user_id::UserId,
 };
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Type, FromRow)]
+#[derive(Display, Debug, Clone, Copy, PartialEq, Eq, Hash, Type, FromRow)]
 #[sqlx(transparent)]
 pub struct SessionId(Uuid);
 

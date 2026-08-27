@@ -1,3 +1,5 @@
+use derive_more::Display;
+
 use crate::authn::{
     application::crypto::hasher::{self, password::PasswordHasherError},
     domain::accounts::{
@@ -17,7 +19,7 @@ pub struct SignUpCommand {
     pub password: String,
 }
 
-#[derive(thiserror::Error, strum::Display, Debug)]
+#[derive(thiserror::Error, Display, Debug)]
 pub enum SignUpError {
     Username(#[from] username::ValidationError),
     Email(#[from] email::ValidationError),
@@ -43,4 +45,28 @@ pub async fn sign_up(
     account_repository.create(new_user).await?;
 
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+  use crate::authn::domain::accounts::repository::MockAbstractAccountRepository;
+
+  use super::*;
+
+  // TODO: this test is mostly useless, but its a showcase (template) for future tests
+  #[tokio::test]
+  async fn sign_up_success() {
+    let mut mock_account_repository = MockAbstractAccountRepository::new();
+    mock_account_repository
+      .expect_create()
+      .returning(|_| Ok(()));
+
+    let cmd = SignUpCommand {
+      username: "test".to_owned(),
+      email: "test@test.test".to_owned(),
+      password: "testTEST1!".to_owned(),
+    };
+
+    sign_up(&mock_account_repository, cmd).await.unwrap();
+  }
 }
