@@ -2,9 +2,12 @@ use async_trait::async_trait;
 use derive_more::Display;
 
 use crate::{
-    authn::domain::sessions::models::{
-        refresh_token::RefreshTokenRotation,
-        session::{NewSession, SessionId},
+    authn::domain::{
+        sessions::models::{
+            refresh_token::RefreshTokenRotation,
+            session::{NewSession, SessionId},
+        },
+        user_id::UserId,
     },
     shared::errors::UnexpectedError,
 };
@@ -31,5 +34,5 @@ pub trait AbstractSessionRepository {
     async fn rotate_refresh_token(
         &self,
         rotation: RefreshTokenRotation,
-    ) -> Result<SessionId, RotateRefreshTokenError>;
+    ) -> Result<(SessionId, UserId), RotateRefreshTokenError>;
 }

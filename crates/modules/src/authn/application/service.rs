@@ -1,6 +1,6 @@
 use crate::authn::{
     application::service::{
-        log_in::{LogInCommand, LogInError},
+        log_in::{LogInCommand, LogInError, TokenPair},
         refresh_session::{RefreshSessionCommand, RefreshSessionError},
         sign_up::{SignUpCommand, SignUpError},
     },
@@ -47,7 +47,7 @@ impl<
         sign_up::sign_up(&self.account_repository, cmd).await
     }
 
-    async fn log_in(&self, cmd: LogInCommand) -> Result<(), LogInError> {
+    async fn log_in(&self, cmd: LogInCommand) -> Result<TokenPair, LogInError> {
         log_in::log_in(
             &self.account_repository,
             &self.session_repository,
@@ -61,6 +61,11 @@ impl<
         &self,
         cmd: RefreshSessionCommand,
     ) -> Result<(), RefreshSessionError> {
-        refresh_session::refresh_session(&self.session_repository, cmd).await
+        refresh_session::refresh_session(
+            &self.session_repository,
+            &self.access_token_repository,
+            cmd,
+        )
+        .await
     }
 }

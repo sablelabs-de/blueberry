@@ -1,7 +1,7 @@
-use derive_more::Display;
+use derive_more::{Display, Into};
 use sqlx::prelude::Type;
 
-#[derive(Debug, Clone, PartialEq, Eq, Hash, Type)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Type, Into)]
 #[sqlx(transparent)]
 pub struct Email(String);
 
@@ -51,18 +51,6 @@ impl Email {
     /// reading from the database.
     pub fn new_unchecked(email: String) -> Self {
         Self(email)
-    }
-}
-
-impl AsRef<str> for Email {
-    fn as_ref(&self) -> &str {
-        &self.0
-    }
-}
-
-impl From<Email> for String {
-    fn from(addr: Email) -> Self {
-        addr.0
     }
 }
 

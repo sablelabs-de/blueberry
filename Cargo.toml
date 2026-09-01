@@ -12,7 +12,9 @@ uuid = { version = "1.24.0", features = [ "v7" ] }
 chrono = "0.4.45"
 async-trait = "0.1.91"
 base64 = "0.23.1"
-derive_more = { version = "2.1.1", features = [ "display"] } # mostly for newtype pattern and errors (
+
+# mostly for newtype pattern and errors
+derive_more = { version = "2.1.1", features = [ "display", "from", "as_ref", "into" ] }
 
 # config
 serde = { version = "1.0", features = [ "derive" ] }

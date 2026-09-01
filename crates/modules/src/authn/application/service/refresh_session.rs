@@ -3,9 +3,17 @@ use derive_more::Display;
 
 use crate::authn::{
     application::crypto::hasher,
-    domain::sessions::{
-        models::refresh_token::{self, RefreshToken, RefreshTokenRotation},
-        repository::{AbstractSessionRepository, RotateRefreshTokenError},
+    domain::{
+        access_tokens::{
+            models::access_token::{AccessToken, AccessTokenRotation},
+            repository::{
+                AbstractAccessTokenRepository, RotateAccessTokenError,
+            },
+        },
+        sessions::{
+            models::refresh_token::{self, RefreshToken, RefreshTokenRotation},
+            repository::{AbstractSessionRepository, RotateRefreshTokenError},
+        },
     },
 };
 
@@ -17,10 +25,12 @@ pub struct RefreshSessionCommand {
 pub enum RefreshSessionError {
     RefreshToken(#[from] refresh_token::ParseError),
     RotateRefreshToken(#[from] RotateRefreshTokenError),
+    RotateAccessToken(#[from] RotateAccessTokenError),
 }
 
 pub async fn refresh_session(
     session_repository: &impl AbstractSessionRepository,
+    access_token_repository: &impl AbstractAccessTokenRepository,
     cmd: RefreshSessionCommand,
 ) -> Result<(), RefreshSessionError> {
     let presented_refresh_token = RefreshToken::parse(&cmd.refresh_token)?;
@@ -36,7 +46,19 @@ pub async fn refresh_session(
         ),
         idle_ttl: Duration::days(30), // TODO: should be from config
     };
-    let session_id = session_repository.rotate_refresh_token(rotation).await?;
+    let (session_id, user_id) =
+        session_repository.rotate_refresh_token(rotation).await?;
+
+    let access_token = AccessToken::generate();
+    let access_token_rotation = AccessTokenRotation {
+        access_token_hash: hasher::access_token::hash(access_token),
+        session_id,
+        user_id,
+        ttl: Duration::minutes(10), // TODO: should be from config
+    };
+    access_token_repository
+        .rotate(access_token_rotation)
+        .await?;
 
     Ok(())
 }

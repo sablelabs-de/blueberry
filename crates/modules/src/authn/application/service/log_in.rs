@@ -32,6 +32,11 @@ pub struct LogInCommand {
     pub password: String,
 }
 
+pub struct TokenPair {
+    access_token: AccessToken,
+    refresh_token: RefreshToken,
+}
+
 #[derive(thiserror::Error, Display, Debug)]
 pub enum LogInError {
     Email(#[from] email::ValidationError),
@@ -47,7 +52,7 @@ pub async fn log_in(
     session_repository: &impl AbstractSessionRepository,
     access_token_repository: &impl AbstractAccessTokenRepository,
     cmd: LogInCommand,
-) -> Result<(), LogInError> {
+) -> Result<TokenPair, LogInError> {
     let email = Email::new(&cmd.email)?;
     let password = Password::new(&cmd.password)?;
 
@@ -80,13 +85,17 @@ pub async fn log_in(
 
     let access_token = AccessToken::generate();
     let access_token_creation = AccessTokenCreation {
-        access_token,
+        access_token_hash: hasher::access_token::hash(access_token),
         session_id,
+        user_id: account.user_id,
         ttl: Duration::minutes(10), // TODO: should be from config
     };
     access_token_repository
         .create(access_token_creation)
         .await?;
 
-    Ok(())
+    Ok(TokenPair {
+        access_token,
+        refresh_token,
+    })
 }

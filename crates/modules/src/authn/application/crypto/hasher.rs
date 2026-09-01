@@ -83,3 +83,16 @@ pub mod refresh_token {
         hash_array.into()
     }
 }
+
+pub mod access_token {
+    use sha2::{Digest, Sha256};
+
+    use crate::authn::domain::access_tokens::models::access_token::{
+        AccessToken, AccessTokenHash,
+    };
+
+    pub fn hash(token: AccessToken) -> AccessTokenHash {
+        let hash_array: [u8; 32] = Sha256::digest(token).into();
+        hash_array.into()
+    }
+}

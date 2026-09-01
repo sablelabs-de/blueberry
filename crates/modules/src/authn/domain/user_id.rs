@@ -4,7 +4,7 @@ use derive_more::Display;
 use sqlx::prelude::Type;
 use uuid::Uuid;
 
-#[derive(Display, Clone, Copy, PartialEq, Eq, Hash, Type)]
+#[derive(Display, Debug, Clone, Copy, PartialEq, Eq, Hash, Type)]
 #[sqlx(transparent)]
 pub struct UserId(Uuid);
 
