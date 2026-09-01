@@ -14,6 +14,7 @@ use crate::authn::{
             models::refresh_token::{self, RefreshToken, RefreshTokenRotation},
             repository::{AbstractSessionRepository, RotateRefreshTokenError},
         },
+        shared::TokenPair,
     },
 };
 
@@ -32,7 +33,7 @@ pub async fn refresh_session(
     session_repository: &impl AbstractSessionRepository,
     access_token_repository: &impl AbstractAccessTokenRepository,
     cmd: RefreshSessionCommand,
-) -> Result<(), RefreshSessionError> {
+) -> Result<TokenPair, RefreshSessionError> {
     let presented_refresh_token = RefreshToken::parse(&cmd.refresh_token)?;
 
     let rotated_refresh_token = presented_refresh_token.rotate();
@@ -60,5 +61,8 @@ pub async fn refresh_session(
         .rotate(access_token_rotation)
         .await?;
 
-    Ok(())
+    Ok(TokenPair {
+        access_token,
+        refresh_token: rotated_refresh_token,
+    })
 }

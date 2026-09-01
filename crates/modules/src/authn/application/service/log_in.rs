@@ -24,17 +24,13 @@ use crate::authn::{
             },
             repository::{AbstractSessionRepository, CreateSessionError},
         },
+        shared::TokenPair,
     },
 };
 
 pub struct LogInCommand {
     pub email: String,
     pub password: String,
-}
-
-pub struct TokenPair {
-    access_token: AccessToken,
-    refresh_token: RefreshToken,
 }
 
 #[derive(thiserror::Error, Display, Debug)]

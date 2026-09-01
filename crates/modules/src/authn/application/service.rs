@@ -1,13 +1,13 @@
 use crate::authn::{
     application::service::{
-        log_in::{LogInCommand, LogInError, TokenPair},
+        log_in::{LogInCommand, LogInError},
         refresh_session::{RefreshSessionCommand, RefreshSessionError},
         sign_up::{SignUpCommand, SignUpError},
     },
     domain::{
         access_tokens::repository::AbstractAccessTokenRepository,
         accounts::repository::AbstractAccountRepository,
-        sessions::repository::AbstractSessionRepository,
+        sessions::repository::AbstractSessionRepository, shared::TokenPair,
     },
 };
 
@@ -60,7 +60,7 @@ impl<
     async fn refresh_session(
         &self,
         cmd: RefreshSessionCommand,
-    ) -> Result<(), RefreshSessionError> {
+    ) -> Result<TokenPair, RefreshSessionError> {
         refresh_session::refresh_session(
             &self.session_repository,
             &self.access_token_repository,
