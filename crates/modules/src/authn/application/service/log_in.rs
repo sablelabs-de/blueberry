@@ -1,8 +1,15 @@
 use chrono::Duration;
+use derive_more::Display;
 
 use crate::authn::{
     application::crypto::hasher::{self, password::PasswordHasherError},
     domain::{
+        access_tokens::{
+            models::access_token::{AccessToken, AccessTokenCreation},
+            repository::{
+                AbstractAccessTokenRepository, CreateAccessTokenError,
+            },
+        },
         accounts::{
             models::{
                 email::{self, Email},
@@ -17,6 +24,7 @@ use crate::authn::{
             },
             repository::{AbstractSessionRepository, CreateSessionError},
         },
+        shared::TokenPair,
     },
 };
 
@@ -25,20 +33,22 @@ pub struct LogInCommand {
     pub password: String,
 }
 
-#[derive(thiserror::Error, strum::Display, Debug)]
+#[derive(thiserror::Error, Display, Debug)]
 pub enum LogInError {
     Email(#[from] email::ValidationError),
     Password(#[from] password::ValidationError),
     PasswordHasher(#[from] PasswordHasherError),
     FindAccount(#[from] FindAccountError),
     CreateSession(#[from] CreateSessionError),
+    CreateAccessToken(#[from] CreateAccessTokenError),
 }
 
 pub async fn log_in(
     account_repository: &impl AbstractAccountRepository,
     session_repository: &impl AbstractSessionRepository,
+    access_token_repository: &impl AbstractAccessTokenRepository,
     cmd: LogInCommand,
-) -> Result<(), LogInError> {
+) -> Result<TokenPair, LogInError> {
     let email = Email::new(&cmd.email)?;
     let password = Password::new(&cmd.password)?;
 
@@ -69,5 +79,19 @@ pub async fn log_in(
     };
     session_repository.create(new_session).await?;
 
-    Ok(())
+    let access_token = AccessToken::generate();
+    let access_token_creation = AccessTokenCreation {
+        access_token_hash: hasher::access_token::hash(access_token),
+        session_id,
+        user_id: account.user_id,
+        ttl: Duration::minutes(10), // TODO: should be from config
+    };
+    access_token_repository
+        .create(access_token_creation)
+        .await?;
+
+    Ok(TokenPair {
+        access_token,
+        refresh_token,
+    })
 }

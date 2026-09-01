@@ -5,8 +5,9 @@ use crate::authn::{
         sign_up::{SignUpCommand, SignUpError},
     },
     domain::{
+        access_tokens::repository::AbstractAccessTokenRepository,
         accounts::repository::AbstractAccountRepository,
-        sessions::repository::AbstractSessionRepository,
+        sessions::repository::AbstractSessionRepository, shared::TokenPair,
     },
 };
 
@@ -17,18 +18,28 @@ pub mod sign_up;
 pub struct AuthNService<
     A: AbstractAccountRepository,
     B: AbstractSessionRepository,
+    C: AbstractAccessTokenRepository,
 > {
     account_repository: A,
     session_repository: B,
+    access_token_repository: C,
 }
 
-impl<A: AbstractAccountRepository, B: AbstractSessionRepository>
-    AuthNService<A, B>
+impl<
+    A: AbstractAccountRepository,
+    B: AbstractSessionRepository,
+    C: AbstractAccessTokenRepository,
+> AuthNService<A, B, C>
 {
-    pub fn new(account_repository: A, session_repository: B) -> Self {
+    pub fn new(
+        account_repository: A,
+        session_repository: B,
+        access_token_repository: C,
+    ) -> Self {
         Self {
             account_repository,
             session_repository,
+            access_token_repository,
         }
     }
 
@@ -36,15 +47,25 @@ impl<A: AbstractAccountRepository, B: AbstractSessionRepository>
         sign_up::sign_up(&self.account_repository, cmd).await
     }
 
-    async fn log_in(&self, cmd: LogInCommand) -> Result<(), LogInError> {
-        log_in::log_in(&self.account_repository, &self.session_repository, cmd)
-            .await
+    async fn log_in(&self, cmd: LogInCommand) -> Result<TokenPair, LogInError> {
+        log_in::log_in(
+            &self.account_repository,
+            &self.session_repository,
+            &self.access_token_repository,
+            cmd,
+        )
+        .await
     }
 
     async fn refresh_session(
         &self,
         cmd: RefreshSessionCommand,
-    ) -> Result<(), RefreshSessionError> {
-        refresh_session::refresh_session(&self.session_repository, cmd).await
+    ) -> Result<TokenPair, RefreshSessionError> {
+        refresh_session::refresh_session(
+            &self.session_repository,
+            &self.access_token_repository,
+            cmd,
+        )
+        .await
     }
 }

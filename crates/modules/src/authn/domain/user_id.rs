@@ -1,9 +1,10 @@
-// todo! this should be in another file
+// TODO: this should be in another file (module)
 
+use derive_more::Display;
 use sqlx::prelude::Type;
 use uuid::Uuid;
 
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Type)]
+#[derive(Display, Debug, Clone, Copy, PartialEq, Eq, Hash, Type)]
 #[sqlx(transparent)]
 pub struct UserId(Uuid);
 

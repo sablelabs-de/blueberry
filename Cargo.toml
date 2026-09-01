@@ -13,6 +13,9 @@ chrono = "0.4.45"
 async-trait = "0.1.91"
 base64 = "0.23.1"
 
+# mostly for newtype pattern and errors
+derive_more = { version = "2.1.1", features = [ "display", "from", "as_ref", "into" ] }
+
 # config
 serde = { version = "1.0", features = [ "derive" ] }
 toml = "0.9"
@@ -24,6 +27,8 @@ axum = "0.8.9"
 tokio = { version = "1.53.1", features = ["macros", "net", "rt-multi-thread"] }
 
 sqlx = { version = "0.9.0", features = [ "uuid", "chrono", "postgres", "runtime-tokio", "tls-native-tls" ] }
+redis = { version = "1.6.0", features = ["tokio-comp", "connection-manager"] }
 
 # tests
 testcontainers-modules = { version = "0.15.0", features = [ "postgres", "redis" ] }
+mockall = "0.15.0"

@@ -5,18 +5,17 @@ edition = "2024"
 
 [dependencies]
 thiserror.workspace = true
-strum.workspace = true
 
 uuid.workspace = true
 chrono.workspace = true
 async-trait.workspace = true
 base64.workspace = true
+derive_more.workspace = true
 
 tokio.workspace = true
 
 sqlx.workspace = true
-
-testcontainers-modules.workspace = true
+redis.workspace = true
 
 # crypto
 rand_core = "0.10.1"
@@ -24,3 +23,7 @@ rand = "0.10.2"
 sha2 = "0.11.0"
 subtle = "2.6.1"
 argon2 = { version = "0.5.3", features = ["std"] } # std is added to resolve OsRng not found issue
+
+[dev-dependencies]
+testcontainers-modules.workspace = true
+mockall.workspace = true

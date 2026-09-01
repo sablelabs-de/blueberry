@@ -1,4 +1,5 @@
 use async_trait::async_trait;
+use derive_more::Display;
 
 use crate::{
     authn::domain::accounts::models::{
@@ -8,19 +9,20 @@ use crate::{
     shared::errors::UnexpectedError,
 };
 
-#[derive(thiserror::Error, strum::Display, Debug)]
+#[derive(thiserror::Error, Display, Debug)]
 pub enum CreateAccountError {
     EmailAlreadyExists,
     UsernameAlreadyExists,
     Unexpected(#[from] UnexpectedError),
 }
 
-#[derive(thiserror::Error, strum::Display, Debug)]
+#[derive(thiserror::Error, Display, Debug)]
 pub enum FindAccountError {
     NotFound,
     Unexpected(#[from] UnexpectedError),
 }
 
+#[cfg_attr(test, mockall::automock)]
 #[async_trait]
 pub trait AbstractAccountRepository {
     async fn create(
