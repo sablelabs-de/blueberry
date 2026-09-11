@@ -5,12 +5,12 @@ use derive_more::Display;
 use sqlx::prelude::{FromRow, Type};
 use uuid::Uuid;
 
-use crate::authn::domain::{
-    sessions::models::{
+use crate::{
+    authn::domain::sessions::models::{
         refresh_selector::RefreshSelector,
         refresh_validator::RefreshValidatorHash,
     },
-    user_id::UserId,
+    identity::domain::users::models::user::UserId,
 };
 
 #[derive(Display, Debug, Clone, Copy, PartialEq, Eq, Hash, Type, FromRow)]

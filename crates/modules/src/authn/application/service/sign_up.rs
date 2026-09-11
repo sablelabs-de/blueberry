@@ -1,16 +1,18 @@
 use derive_more::Display;
 
-use crate::authn::{
-    application::crypto::hasher::{self, password::PasswordHasherError},
-    domain::accounts::{
-        models::{
-            account::NewAccount,
-            email::{self, Email},
-            password::{self, Password},
-            username::{self, Username},
+use crate::{
+    authn::{
+        application::crypto::hasher::{self, password::PasswordHasherError},
+        domain::accounts::{
+            models::{
+                account::NewAccount,
+                email::{self, Email},
+                password::{self, Password},
+            },
+            repository::{AbstractAccountRepository, CreateAccountError},
         },
-        repository::{AbstractAccountRepository, CreateAccountError},
     },
+    identity::domain::users::models::username::{self, Username},
 };
 
 pub struct SignUpCommand {

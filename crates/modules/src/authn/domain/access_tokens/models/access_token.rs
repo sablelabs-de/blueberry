@@ -4,8 +4,9 @@ use base64::{Engine, prelude::BASE64_URL_SAFE_NO_PAD};
 use chrono::Duration;
 use derive_more::{AsRef, Display, From};
 
-use crate::authn::domain::{
-    sessions::models::session::SessionId, user_id::UserId,
+use crate::{
+    authn::domain::sessions::models::session::SessionId,
+    identity::domain::users::models::user::UserId,
 };
 
 #[derive(Clone, Copy, AsRef)]

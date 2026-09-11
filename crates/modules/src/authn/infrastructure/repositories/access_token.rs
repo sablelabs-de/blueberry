@@ -13,8 +13,8 @@ use crate::{
             },
         },
         sessions::models::session::SessionId,
-        user_id::UserId,
     },
+    identity::domain::users::models::user::UserId,
     shared::errors::UnexpectedError,
 };
 

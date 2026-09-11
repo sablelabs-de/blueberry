@@ -2,21 +2,19 @@ use async_trait::async_trait;
 use sqlx::PgPool;
 
 use crate::{
-    authn::domain::{
-        sessions::{
-            models::{
-                refresh_selector::RefreshSelector,
-                refresh_token::RefreshTokenRotation,
-                refresh_validator::RefreshValidatorHash,
-                session::{NewSession, SessionId},
-            },
-            repository::{
-                AbstractSessionRepository, CreateSessionError,
-                RotateRefreshTokenError,
-            },
+    authn::domain::sessions::{
+        models::{
+            refresh_selector::RefreshSelector,
+            refresh_token::RefreshTokenRotation,
+            refresh_validator::RefreshValidatorHash,
+            session::{NewSession, SessionId},
         },
-        user_id::UserId,
+        repository::{
+            AbstractSessionRepository, CreateSessionError,
+            RotateRefreshTokenError,
+        },
     },
+    identity::domain::users::models::user::UserId,
     shared::errors::UnexpectedError,
 };
 

@@ -2,13 +2,11 @@ use async_trait::async_trait;
 use derive_more::Display;
 
 use crate::{
-    authn::domain::{
-        sessions::models::{
-            refresh_token::RefreshTokenRotation,
-            session::{NewSession, SessionId},
-        },
-        user_id::UserId,
+    authn::domain::sessions::models::{
+        refresh_token::RefreshTokenRotation,
+        session::{NewSession, SessionId},
     },
+    identity::domain::users::models::user::UserId,
     shared::errors::UnexpectedError,
 };
 
