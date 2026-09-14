@@ -1,18 +1,19 @@
 use std::net::IpAddr;
 
 use chrono::{DateTime, Duration, Utc};
+use derive_more::Display;
 use sqlx::prelude::{FromRow, Type};
 use uuid::Uuid;
 
-use crate::authn::domain::{
-    sessions::models::{
+use crate::{
+    authn::domain::sessions::models::{
         refresh_selector::RefreshSelector,
         refresh_validator::RefreshValidatorHash,
     },
-    user_id::UserId,
+    identity::domain::users::models::user::UserId,
 };
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Type, FromRow)]
+#[derive(Display, Debug, Clone, Copy, PartialEq, Eq, Hash, Type, FromRow)]
 #[sqlx(transparent)]
 pub struct SessionId(Uuid);
 

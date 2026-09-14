@@ -1,6 +1,7 @@
+use derive_more::{Display, Into};
 use sqlx::prelude::Type;
 
-#[derive(Debug, Clone, PartialEq, Eq, Hash, Type)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Type, Into)]
 #[sqlx(transparent)]
 pub struct Email(String);
 
@@ -53,19 +54,7 @@ impl Email {
     }
 }
 
-impl AsRef<str> for Email {
-    fn as_ref(&self) -> &str {
-        &self.0
-    }
-}
-
-impl From<Email> for String {
-    fn from(addr: Email) -> Self {
-        addr.0
-    }
-}
-
-#[derive(thiserror::Error, strum::Display, Debug, PartialEq)]
+#[derive(thiserror::Error, Display, Debug, PartialEq)]
 pub enum ValidationError {
     Empty,
     TooLong,

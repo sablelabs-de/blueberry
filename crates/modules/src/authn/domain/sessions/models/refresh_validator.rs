@@ -1,18 +1,15 @@
 use std::fmt::Debug;
 
 use base64::{Engine, prelude::BASE64_URL_SAFE_NO_PAD};
+use derive_more::{AsRef, From};
 use sqlx::prelude::Type;
 use subtle::{Choice, ConstantTimeEq};
 
 use crate::authn::domain::sessions::models::refresh_token::ParseError;
 
+#[derive(AsRef)]
+#[as_ref([u8])]
 pub struct RefreshValidator([u8; 32]);
-
-impl AsRef<[u8]> for RefreshValidator {
-    fn as_ref(&self) -> &[u8] {
-        &self.0
-    }
-}
 
 impl RefreshValidator {
     pub fn generate() -> Self {
@@ -32,7 +29,7 @@ impl RefreshValidator {
     }
 }
 
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Type)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Type, From)]
 #[sqlx(transparent)]
 pub struct RefreshValidatorHash([u8; 32]);
 
@@ -45,12 +42,6 @@ impl RefreshValidatorHash {
 impl ConstantTimeEq for RefreshValidatorHash {
     fn ct_eq(&self, other: &Self) -> Choice {
         self.0.ct_eq(&other.0)
-    }
-}
-
-impl From<[u8; 32]> for RefreshValidatorHash {
-    fn from(bytes: [u8; 32]) -> Self {
-        Self(bytes)
     }
 }
 

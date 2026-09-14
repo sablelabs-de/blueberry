@@ -1,19 +1,21 @@
 use async_trait::async_trait;
+use derive_more::Display;
 
 use crate::{
     authn::domain::sessions::models::{
         refresh_token::RefreshTokenRotation,
         session::{NewSession, SessionId},
     },
+    identity::domain::users::models::user::UserId,
     shared::errors::UnexpectedError,
 };
 
-#[derive(thiserror::Error, strum::Display, Debug)]
+#[derive(thiserror::Error, Display, Debug)]
 pub enum CreateSessionError {
     Unexpected(#[from] UnexpectedError),
 }
 
-#[derive(thiserror::Error, strum::Display, Debug)]
+#[derive(thiserror::Error, Display, Debug)]
 pub enum RotateRefreshTokenError {
     InvalidToken,
     ReuseDetectedAndRevoked,
@@ -30,5 +32,5 @@ pub trait AbstractSessionRepository {
     async fn rotate_refresh_token(
         &self,
         rotation: RefreshTokenRotation,
-    ) -> Result<SessionId, RotateRefreshTokenError>;
+    ) -> Result<(SessionId, UserId), RotateRefreshTokenError>;
 }

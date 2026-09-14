@@ -2,19 +2,16 @@ use async_trait::async_trait;
 use sqlx::{PgPool, Postgres, Transaction};
 
 use crate::{
-    authn::domain::{
-        accounts::{
-            models::{
-                account::{Account, NewAccount},
-                email::Email,
-                username::Username,
-            },
-            repository::{
-                AbstractAccountRepository, CreateAccountError, FindAccountError,
-            },
+    authn::domain::accounts::{
+        models::{
+            account::{Account, NewAccount},
+            email::Email,
         },
-        user_id::UserId,
+        repository::{
+            AbstractAccountRepository, CreateAccountError, FindAccountError,
+        },
     },
+    identity::domain::users::models::{user::UserId, username::Username},
     shared::errors::UnexpectedError,
 };
 

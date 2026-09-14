@@ -1,4 +1,5 @@
 use chrono::Duration;
+use derive_more::Display;
 
 use crate::authn::domain::sessions::models::{
     refresh_selector::RefreshSelector,
@@ -53,7 +54,7 @@ pub struct RefreshTokenRotation {
     pub idle_ttl: Duration,
 }
 
-#[derive(thiserror::Error, strum::Display, Debug, PartialEq)]
+#[derive(thiserror::Error, Display, Debug, PartialEq)]
 pub enum ParseError {
     InvalidStructure,
     MalformedSelector,

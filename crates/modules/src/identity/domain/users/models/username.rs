@@ -1,3 +1,4 @@
+use derive_more::Display;
 use sqlx::prelude::Type;
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Type)]
@@ -71,7 +72,7 @@ impl From<Username> for String {
     }
 }
 
-#[derive(thiserror::Error, strum::Display, Debug, PartialEq)]
+#[derive(thiserror::Error, Display, Debug, PartialEq)]
 pub enum ValidationError {
     Empty,
     TooShort,
