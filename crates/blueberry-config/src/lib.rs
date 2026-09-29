@@ -12,4 +12,9 @@ pub mod structs;
 
 pub use error::ConfigError;
 pub use loader::profile;
-pub use structs::{Config, Environment, ServerConfig};
+pub use structs::{
+    Config, DatabaseConfig, Environment, EphemeralBackend,
+    EphemeralDatabaseBackend, EphemeralDatabaseConfig, MySqlConfig,
+    PersistentBackend, PersistentDatabaseBackend, PersistentDatabaseConfig,
+    PostgresConfig, RedisConfig, ServerConfig, SqliteConfig,
+};

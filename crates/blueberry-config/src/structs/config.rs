@@ -1,12 +1,13 @@
 use serde::Deserialize;
 
-use super::ServerConfig;
+use super::{DatabaseConfig, ServerConfig};
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Config {
     #[serde(default)]
     pub environment: Environment,
     pub server: ServerConfig,
+    pub database: DatabaseConfig,
 }
 
 #[derive(Debug, Clone, Default, Deserialize)]

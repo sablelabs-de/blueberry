@@ -20,4 +20,16 @@ pub enum ConfigError {
         path: PathBuf,
         source: toml::de::Error,
     },
+
+    /// The config parsed, but the values it holds are not a usable combination.
+    #[error("invalid config: {message}")]
+    Invalid { message: String },
+}
+
+impl ConfigError {
+    pub(crate) fn invalid(message: impl Into<String>) -> Self {
+        Self::Invalid {
+            message: message.into(),
+        }
+    }
 }

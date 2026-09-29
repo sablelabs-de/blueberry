@@ -13,3 +13,40 @@ environment = "development" # This should only be "development", "staging", or "
 [server]
 host = "127.0.0.1" # You will have to use 0.0.0.0 if running under Docker.
 port = 5178
+
+[database.persistent]
+# Available: postgres, sqlite, mysql
+backend = "sqlite"
+
+[database.persistent.sqlite]
+path = "./sable.db"
+
+# Only the table for the selected `backend` is used.
+#
+# [database.persistent.postgres]
+# host = "localhost"
+# port = 5432
+# username = "sable"
+# password = "MyW0rd1sP4ssed!"
+# database = "sable"
+#
+# [database.persistent.mysql]
+# host = "localhost"
+# port = 3306
+# username = "sable"
+# password = "MyP4ss1sW0rded!"
+# database = "sable"
+
+[database.ephemeral]
+# Available: redis, memory
+backend = "memory"
+
+# Only the table for the selected 'backend' is used.
+#
+# [database.ephemeral.redis]
+# host = "localhost"
+# port = 6379
+# username = "sable"
+# password = "W0rded1sMyP4ss!"
+# database = 0
+# tls = false

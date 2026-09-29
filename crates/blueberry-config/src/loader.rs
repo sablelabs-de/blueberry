@@ -33,13 +33,14 @@ impl Config {
         let base = read_optional(&base_path)?;
         let specific = read_optional(&profile_path)?;
 
-        let value = match (base, specific) {
+        // Parse errors are attributed to a file that actually exists.
+        let (value, source_path) = match (base, specific) {
             (Some(mut base), Some(specific)) => {
                 merge(&mut base, specific);
-                base
+                (base, profile_path)
             }
-            (Some(base), None) => base,
-            (None, Some(specific)) => specific,
+            (Some(base), None) => (base, base_path),
+            (None, Some(specific)) => (specific, profile_path),
             (None, None) => {
                 return Err(ConfigError::NotFound {
                     profile: profile.to_owned(),
@@ -47,10 +48,16 @@ impl Config {
             }
         };
 
-        Config::deserialize(value).map_err(|source| ConfigError::Parse {
-            path: profile_path,
-            source,
-        })
+        let config = Config::deserialize(value).map_err(|source| {
+            ConfigError::Parse {
+                path: source_path,
+                source,
+            }
+        })?;
+
+        config.database.validate()?;
+
+        Ok(config)
     }
 }
 
